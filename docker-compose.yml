@@ -1,0 +1,9 @@
+services:
+  kafka-consumer:
+      container_name: consumer
+      image: kafka-consumer-v1
+      build:
+        context: .
+        dockerfile: ./Dockerfile
+      ports:
+        - 3000:3000
