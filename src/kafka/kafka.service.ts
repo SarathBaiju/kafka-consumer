@@ -7,7 +7,8 @@ import { Kafka } from 'kafkajs';
 @Injectable()
 export class KafkaService {
   constructor(private readonly eventEmitter: EventEmitter2) {}
-  async onModuleInit() {
+
+  async consume(topic: string) {
     const kafka = new Kafka({
       brokers: ['localhost:9092'],
       clientId: 'my-app',
@@ -17,7 +18,7 @@ export class KafkaService {
       host: 'http://localhost:8081',
     });
 
-    const consumer = kafka.consumer({ groupId: 'my-app-consumer2' });
+    const consumer = kafka.consumer({ groupId: 'my-app-consumer3' });
 
     await consumer.connect();
     await consumer.subscribe({
