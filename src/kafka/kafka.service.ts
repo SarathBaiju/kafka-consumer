@@ -18,11 +18,11 @@ export class KafkaService {
       host: 'http://localhost:8081',
     });
 
-    const consumer = kafka.consumer({ groupId: 'my-app-consumer3' });
+    const consumer = kafka.consumer({ groupId: 'my-app-consumer4' });
 
     await consumer.connect();
     await consumer.subscribe({
-      topic: 'public.db.research_topics_graph.AbstractAuthor.v0',
+      topic: topic,
       fromBeginning: true,
     });
 
