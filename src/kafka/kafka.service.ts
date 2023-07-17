@@ -1,9 +1,12 @@
 import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import EventEmitter from 'events';
 import { Kafka } from 'kafkajs';
 
 @Injectable()
 export class KafkaService {
+  constructor(private readonly eventEmitter: EventEmitter2) {}
   async onModuleInit() {
     const kafka = new Kafka({
       brokers: ['localhost:9092'],
@@ -14,7 +17,7 @@ export class KafkaService {
       host: 'http://localhost:8081',
     });
 
-    const consumer = kafka.consumer({ groupId: 'my-app-consumer1' });
+    const consumer = kafka.consumer({ groupId: 'my-app-consumer2' });
 
     await consumer.connect();
     await consumer.subscribe({
@@ -26,8 +29,8 @@ export class KafkaService {
       eachMessage: async ({ topic, partition, message }) => {
         const key = await schemaRegistry.decode(message.key);
         const value = await schemaRegistry.decode(message.value);
-        console.log({ key });
-        console.log({ value });
+
+        this.eventEmitter.emit(topic, key, value);
       },
     });
   }
